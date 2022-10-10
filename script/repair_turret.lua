@@ -33,12 +33,18 @@ local moving_entities = util.list_to_map({
   "artillery-wagon",
   "construction-robot",
   "logistic-robot",
-  "spider-vehicle"
+  "spider-vehicle",
 })
 
 local ghost_names = util.list_to_map({
   "entity-ghost",
-  "tile-ghost"
+  "tile-ghost",
+})
+
+-- first to get constructed, last to deconstruct
+local prioritized_types = util.list_to_map({
+  "electric-pole",
+  "roboport",
 })
 
 local can_move = function(entity)
@@ -531,7 +537,8 @@ local get_construction_target = function(entities, turret, turret_data)
   end
 
   local items = {}
-  local ghosts = {}
+  local ghosts_p1 = {}
+  local ghosts_p2 = {}
 
   local low_priority_queue = turret_data.low_priority_queue
   if not low_priority_queue then
@@ -544,7 +551,11 @@ local get_construction_target = function(entities, turret, turret_data)
       local item = get_item(entity)
       if item and can_build(entity) then
         items[k] = item
-        ghosts[k] = entity
+        if prioritized_types[entity.ghost_type] then
+          ghosts_p1[k] = entity
+        else
+          ghosts_p2[k] = entity
+        end
       else
         low_priority_queue[k] = entity
         entities[k] = nil
@@ -552,7 +563,7 @@ local get_construction_target = function(entities, turret, turret_data)
     end
   end
 
-  local closest = surface.get_closest(turret.position, ghosts)
+  local closest = surface.get_closest(turret.position, ghosts_p1) or surface.get_closest(turret.position, ghosts_p2)
   if closest then
     --turret.surface.create_entity{name = "flying-text", position = turret.position, text = "Close"}
     return closest, items[closest.unit_number]
@@ -646,7 +657,8 @@ end
 
 local get_deconstruction_target = function(entities, turret)
 
-  local available = {}
+  local available_p1 = {}
+  local available_p2 = {}
   if not next(turret.logistic_network.storage_points) then return end
 
   for k, entity in pairs (entities) do
@@ -654,15 +666,15 @@ local get_deconstruction_target = function(entities, turret)
       local deconstruction_item = get_deconstruction_item(entity)
       if deconstruction_item then
         if turret.logistic_network.can_satisfy_request(deconstruction_item.name, deconstruction_item.count) then
-          available[k] = entity
+          if prioritized_types[entity.type] then available_p2[k] = entity else available_p1[k] = entity end
         end
       else
-        available[k] = entity
+        if prioritized_types[entity.type] then available_p2[k] = entity else available_p1[k] = entity end
       end
     end
   end
 
-  return turret.surface.get_closest(turret.position, available)
+  return turret.surface.get_closest(turret.position, available_p1) or turret.surface.get_closest(turret.position, available_p2)
 
 end
 

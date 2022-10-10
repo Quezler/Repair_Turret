@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2022-10-10
+  Changes:
+    - Prioritize constructing electric poles and roboports first regardless of nearby distance.
+    - Deconstruct electric poles and roboports last since you need those to deconstruct at all.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.6
 Date: 2022-10-10
   Changes:
