@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2022-10-09
+  Changes:
+    - Fix any repair turret placed before switching to repair turrets not functioning as expected.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2022-10-09
   Changes:

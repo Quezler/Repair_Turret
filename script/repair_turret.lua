@@ -1115,6 +1115,20 @@ lib.on_init = function()
   global.repair_turret = global.repair_turret or script_data
   pathfinding.cache = script_data.pathfinder_cache
   script_data.proxy_inventory = game.create_inventory(200)
+
+  -- for users switching to this mod
+  for _, force in pairs(game.forces) do
+    for _, technology in pairs(force.technologies) do
+      on_research_finished({research = technology})
+    end
+  end
+
+  -- also for users switching to this mod
+  for _, surface in pairs(game.surfaces) do
+    for _, entity in pairs(surface.find_entities_filtered({name = turret_name})) do
+      on_created_entity({entity = entity})
+    end
+  end
 end
 
 lib.on_load = function()
