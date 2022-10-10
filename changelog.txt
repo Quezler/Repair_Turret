@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022-10-09
+  Changes:
+    - Prevented repair turrets from spilling contents onto belts. Thanks to Quezler on Github.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2022-06-06
   Changes:
