@@ -728,7 +728,12 @@ local deconstruct_entity = function(turret, entity)
       end
     end
     if count > 0 then
-      count = count - network.insert(stack)
+      while true do
+        stack.count = count
+        local inserted = network.insert(stack)
+        count = count - inserted
+        if count == 0 or inserted == 0 then break end
+      end
     end
     if count > 0 then
       stack.count = count
