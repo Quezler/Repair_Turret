@@ -22,26 +22,24 @@ local script_data =
   proxy_inventory = nil
 }
 
-local moving_entities =
-{
-  ["car"] = true,
-  ["unit"] = true,
-  ["character"] = true,
-  ["combat-robot"] = true,
-  ["locomotive"] = true,
-  ["cargo-wagon"] = true,
-  ["fluid-wagon"] = true,
-  ["artillery-wagon"] = true,
-  ["construction-robot"] = true,
-  ["logistic-robot"] = true,
-  ["spider-vehicle"] = true
-}
+local moving_entities = util.list_to_map({
+  "car",
+  "unit",
+  "character",
+  "combat-robot",
+  "locomotive",
+  "cargo-wagon",
+  "fluid-wagon",
+  "artillery-wagon",
+  "construction-robot",
+  "logistic-robot",
+  "spider-vehicle"
+})
 
-local ghost_names =
-{
-  ["entity-ghost"] = true,
-  ["tile-ghost"] = true
-}
+local ghost_names = util.list_to_map({
+  "entity-ghost",
+  "tile-ghost"
+})
 
 local can_move = function(entity)
   return moving_entities[entity.type]
