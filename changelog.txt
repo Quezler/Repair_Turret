@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2022-10-10
+  Changes:
+    - Support deconstructing cliffs when there are cliff explosives present in the logistic network.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.5
 Date: 2022-10-09
   Changes:

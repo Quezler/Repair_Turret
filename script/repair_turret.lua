@@ -641,6 +641,11 @@ local build_entity = function(turret, ghost, item)
 
 end
 
+local get_deconstruction_item = function(entity)
+  if entity.type == "cliff" then return {name = entity.prototype.cliff_explosive_prototype, count = 1} end
+  return nil
+end
+
 local get_deconstruction_target = function(entities, turret)
 
   local available = {}
@@ -648,7 +653,14 @@ local get_deconstruction_target = function(entities, turret)
 
   for k, entity in pairs (entities) do
     if entity.valid and entity.to_be_deconstructed() and entity.can_be_destroyed() then
-      available[k] = entity
+      local deconstruction_item = get_deconstruction_item(entity)
+      if deconstruction_item then
+        if turret.logistic_network.can_satisfy_request(deconstruction_item.name, deconstruction_item.count) then
+          available[k] = entity
+        end
+      else
+        available[k] = entity
+      end
     end
   end
 
@@ -675,6 +687,11 @@ local deconstruct_entity = function(turret, entity)
         {name = tile_name, position = position}
       }
     end
+  end
+
+  local deconstruction_item = get_deconstruction_item(entity)
+  if deconstruction_item then
+    turret.logistic_network.remove_item(deconstruction_item)
   end
 
   local success = entity.mine
@@ -973,7 +990,7 @@ local check_deconstruction_check_queue = function()
 
     deconstruct_check_queue[index] = nil
 
-    if entity.valid and entity.type ~= "cliff" then
+    if entity.valid then
       check_deconstruction(entity.unit_number or (entity.position.x.."-"..entity.position.y), entity)
     end
   end
