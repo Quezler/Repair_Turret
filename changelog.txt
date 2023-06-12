@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2023-06-12
+  Changes:
+    - Ignore repair checks for alien biomes rocks (space exploration auto glaive).
+    - Ignore repair checks for spaceship asteroid vehicles.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.9
 Date: 2023-03-04
   Changes:

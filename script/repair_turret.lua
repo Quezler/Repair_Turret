@@ -1016,6 +1016,8 @@ local on_tick = function(event)
 
 end
 
+-- local dmgcount = {}
+
 local on_entity_damaged = function(event)
 
   local entity = event.entity
@@ -1023,6 +1025,9 @@ local on_entity_damaged = function(event)
     return
   end
 
+  -- print(entity.type .. ':' .. entity.name .. ':' .. entity.force.name .. serpent.line( script.get_prototype_history(entity.type, entity.name) ))
+  -- dmgcount[entity.name] = (dmgcount[entity.name] or 0) + 1
+  -- if dmgcount[entity.name] % 1000 == 0 then log(entity.name .. serpent.line(script.get_prototype_history(entity.type, entity.name)) .. ' @ ' .. entity.surface.name .. serpent.line(entity.position)) end
   add_to_repair_check_queue(entity)
 
 end
@@ -1086,8 +1091,15 @@ local set_damaged_event_filter = function()
 end
 
 local update_non_repairable_entities = function()
-  script_data.non_repairable_entities = {}
+  script_data.non_repairable_entities = {
+    "se-spaceship-obstacle-small-vehicle",
+    "se-spaceship-obstacle-medium-vehicle",
+    "se-spaceship-obstacle-large-vehicle",
+  }
   for name, entity in pairs (game.entity_prototypes) do
+    if not entity.has_flag("player-creation") then
+      script_data.non_repairable_entities[name] = true
+    end
     if entity.has_flag("not-repairable") then
       script_data.non_repairable_entities[name] = true
     end
